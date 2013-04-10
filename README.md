@@ -6,7 +6,7 @@ A responsive-friendly javascript slideshow
 
 Usage Example
 -----------
-Just call the function in your main javascript file or in your html file.
+Just include the plugin in your site and call the function in your main javascript file.
 
 ### Basic Example (default options):
 
@@ -23,10 +23,10 @@ Default options
 -----------
 
 	autoplay: true,  	
-	random: true,			// randomize the image order
+	random: true,		// randomize the image order
 	startindex: null, 
-	delay: 2000,      // delay between slides
-	speed: 1000,      // transition speed
-	paginator: null,  // selector
-	nums: false,			// set the selectors to numbers
+	delay: 2000,		// delay between slides
+	speed: 1000,		// transition speed
+	paginator: null,	// selector
+	nums: false,		// set the selectors to numbers
 	debug: false
