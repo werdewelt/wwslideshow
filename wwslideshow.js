@@ -28,6 +28,8 @@
 var wwSlideshow = function(selector, options) {
   var self = this;
 
+  if (selector.children().length === 0) return;
+
   this.defaultopts = {
     autoplay: true,
     random: true,
@@ -67,12 +69,24 @@ var wwSlideshow = function(selector, options) {
   this.paginators = null;
   this.timer = null;
 
-  // Prepare images
+  // Prepare contents
   this.slides = selector.children().css({
     opacity: 0,
     position: 'absolute'
   });
-  this.slides.last().css('position', 'relative');
+  // Find tallest content
+  var max_size=0;
+  var max_elem;
+  selector.children().each(function (i, e) {
+    var elem = $(e);
+    var size = elem.outerHeight()
+    if ( size > max_size ) {
+      max_elem=elem;
+      max_size = size;
+    }
+  });
+  max_elem.css('position', 'relative');
+  
   this.count = this.slides.length;
 
   this._createDots();
