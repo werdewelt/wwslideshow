@@ -47,7 +47,8 @@ var wwSlideshow = function(selector, options) {
     realhide: false,
     easing: "swing",
     center: false,
-    startdelay: 0
+    startdelay: 0,
+    text: false
   };
 
   if (typeof selector === "string") {
@@ -82,15 +83,27 @@ var wwSlideshow = function(selector, options) {
   // Prepare contents
   selector.css("position", "relative");
   if (options.realhide) selector.children().hide();
-  this.slides = selector.children().css({
-    opacity: 0,
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    "z-index": 0
-  });
+  if (options.text) {
+    this.slides = selector.children().css({
+      opacity: 0,
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      right: 0,
+      "z-index": 0
+    });
+  }
+  else {
+    this.slides = selector.children().css({
+      opacity: 0,
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      "z-index": 0
+    });
+  }
   // Find tallest content
   var max_size=0;
   var max_elem = selector.children().first();
