@@ -287,10 +287,7 @@ wwSlideshow.prototype._createDots = function() {
   if (options.debug) console.log("createDots")
 
   if (options.paginator) {
-    this.paginators = $("<div/>").appendTo(options.paginator).addClass('paginator').css({
-      position: 'absolute',
-      'z-index': 20000
-    })
+    this.paginators = $("<div/>").appendTo(options.paginator).addClass('paginator');
     for (i=0; i<this.count; i++) {
       page = $("<a/>").appendTo(this.paginators).addClass('page inact').attr('href','#');
 
