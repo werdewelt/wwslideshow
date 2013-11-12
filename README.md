@@ -21,24 +21,27 @@ You can customize the default parameters within the function:
 
 Default options
 -----------
-  autoplay: true,
-  random: true,     // randomize the image order
-  startindex: null,
-  delay: 2000,      // delay between slides
-  speed: 1000,      // transition speed
-  paginator: null,  // selector
-  nums: false,      // set the selectors to numbers
-  debug: false,
-  fadeover: false,
-  upscale: false,
-  overscale: false,
-  fxinterval: 13,
-  fitheight: false,
-  realhide: false,
-  easing: "swing",
-  center: false,
-  startdelay: 0,
-  text: false
+
+```
+autoplay: true,
+random: true,     // randomize the image order
+startindex: null,
+delay: 2000,      // delay between slides
+speed: 1000,      // transition speed
+paginator: null,  // selector
+nums: false,      // set the selectors to numbers
+debug: false,
+fadeover: false,
+upscale: false,
+overscale: false,
+fxinterval: 13,
+fitheight: false,
+realhide: false,
+easing: "swing",
+center: false,
+startdelay: 0,
+text: false
+```
 
 ### Prev&Next Buttons
 
