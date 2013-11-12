@@ -21,6 +21,8 @@ You can customize the default parameters within the function:
 
 Default options
 -----------
+
+```
   autoplay: true,
   random: true,     // randomize the image order
   startindex: null,
@@ -39,6 +41,7 @@ Default options
   center: false,
   startdelay: 0,
   text: false
+```
 
 ### Prev&Next Buttons
 
