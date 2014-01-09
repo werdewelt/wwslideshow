@@ -38,21 +38,31 @@ var wwSlideshow = function(selector, options) {
     speed: 1000,      // transition speed
     paginator: null,  // selector
     nums: false,
-    debug: false
-  }
+    debug: false,
+    fadeover: false,
+    upscale: false,
+    overscale: false,
+    fxinterval: 13,
+    fitheight: false,
+    realhide: false,
+    easing: "swing",
+    center: false,
+    startdelay: 0,
+    text: false
+  };
 
   if (typeof selector === "string") {
-    selector = $(selector)
+    selector = $(selector);
   }
 
   if (typeof options === "undefined") {
-    options = {}
+    options = {};
   }
 
   if (typeof options.autoplay !== "undefined" && !options.autoplay && typeof options.random == "undefined"){
-    options.random = false
+    options.random = false;
   }
-  if (typeof options.startindex !== "undefined"){ 
+  if (typeof options.startindex !== "undefined"){
     options.random = false;
   }
 
@@ -62,6 +72,7 @@ var wwSlideshow = function(selector, options) {
   options = this.options;
 
   // Init attributes
+  this.last_index = 0;
   this.active_index = 0;
   this.next_index = 0;
   this.count = 0;
@@ -70,31 +81,69 @@ var wwSlideshow = function(selector, options) {
   this.timer = null;
 
   // Prepare contents
-  this.slides = selector.children().css({
-    opacity: 0,
-    position: 'absolute'
-  });
+  selector.css("position", "relative");
+  if (options.realhide) selector.children().hide();
+  if (options.text) {
+    this.slides = selector.children().css({
+      opacity: 0,
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      right: 0,
+      "z-index": 0
+    });
+  }
+  else {
+    this.slides = selector.children().css({
+      opacity: 0,
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      "z-index": 0
+    });
+  }
   // Find tallest content
   var max_size=0;
-  var max_elem;
+  var max_elem = selector.children().first();
   selector.children().each(function (i, e) {
     var elem = $(e);
-    var size = elem.outerHeight()
+    var size = elem.height();
     if ( size > max_size ) {
-      max_elem=elem;
+      max_elem = elem;
       max_size = size;
     }
   });
   max_elem.css('position', 'relative');
-  
+
+  // Fit height option
+  if (options.fitheight) {
+    selector.children().css({
+      height: "inherit",
+      width: "auto"
+    });
+  }
+
+  // Fit height option
+  if (options.center) {
+    selector.children().each(function(){
+      $(this).css("top", selector.height()/2-$(this).height()/2);
+    });
+  }
+
   this.count = this.slides.length;
+
+  if (options.scaleup) {
+    $(window).resize(function() {
+    });
+  }
 
   this._createDots();
 
   // Find starting image
-
   if (options.random) {
-    this.active_index = Math.floor(this.count * Math.random())
+    this.active_index = Math.floor(this.count * Math.random());
   } else {
     this.active_index = options.startindex % this.count;
   }
@@ -104,10 +153,10 @@ var wwSlideshow = function(selector, options) {
 
 
   // Show first image
-  this.slides.eq(this.active_index).css({opacity: 1.0});
+  this.slides.eq(this.active_index).css({opacity: 1.0}).show();
 
   // Shedule next slide
-  if (options.autoplay) this.timer = setTimeout(function(){self._next()}, options.delay + 1);
+  if (options.autoplay) this.timer = setTimeout(function(){self._next(); }, options.startdelay + options.delay + 1);
 };
 
 
@@ -119,7 +168,7 @@ wwSlideshow.prototype.constructor = wwSlideshow;
 wwSlideshow.prototype.prev = function() {
   var self = this;
   var options = this.options;
-  if (options.debug) console.log('prev')
+  if (options.debug) console.log('prev');
 
   clearTimeout(this.timer);
   options.autoplay = false;
@@ -129,30 +178,72 @@ wwSlideshow.prototype.prev = function() {
 wwSlideshow.prototype.next = function() {
   var self = this;
   var options = this.options;
-  if (options.debug) console.log('next')
+  if (options.debug) console.log('next');
 
   clearTimeout(this.timer);
   options.autoplay = false;
-  this._next(); 
+  this._next();
 };
 
 wwSlideshow.prototype.show = function(index) {
   var self = this;
   var options = this.options;
-  if (options.debug) console.log("show")
+  if (options.debug) console.log("show");
 
   if (index == this.active_index) return;
 
+  // Before
   this.next_index = index;
   this._beforeSlide(this.next_index);
-  this.slides.eq(this.active_index).animate({opacity: 0.0}, options.speed);
-  this.active_index = this.next_index;
-  this.slides.eq(this.active_index).animate({opacity: 1.0}, options.speed, function(){ self._afterSlide()});
-}
+
+  this._transition( self.active_index, this.next_index, function() {
+    self.last_index = self.active_index;
+    self.active_index = self.next_index;
+    self._afterSlide();
+  });
+  //this.slides.eq(this.active_index).animate({opacity: 0.0}, options.speed);
+};
+
+wwSlideshow.prototype.getIndex = function() {
+  return this.active_index;
+};
 
 
 // Private
 // =============================================================================
+
+
+wwSlideshow.prototype._transition = function(from_index, to_index, done) {
+  var self = this;
+  var options = this.options;
+  var from = this.slides.eq(from_index);
+  var to = this.slides.eq(to_index);
+
+  var defaultInterval = jQuery.fx.interval;
+  
+  jQuery.fx.interval = options.fxinterval;
+  if (options.fadeover) {
+    from.css("z-index", 0);
+    to.css("z-index", 1);
+    to.animate({opacity: 1.0}, options.speed, options.easing, function(){
+      from.css('opacity',0);
+      jQuery.fx.interval = defaultInterval;
+      done();
+    });
+  } else {
+    from.animate({opacity: 0}, options.speed, options.easing, function() {
+      if (options.realhide) from.hide();
+    });
+    if (options.realhide) to.show();
+    to.animate({opacity: 1.0}, options.speed, options.easing, function(){
+      from.css("z-index", 0);
+      to.css("z-index", 1);
+      jQuery.fx.interval = defaultInterval;
+      done();
+    });
+  }
+
+};
 
 wwSlideshow.prototype._prev = function() { 
   if (this.options.debug) console.log('_prev')
@@ -196,10 +287,7 @@ wwSlideshow.prototype._createDots = function() {
   if (options.debug) console.log("createDots")
 
   if (options.paginator) {
-    this.paginators = $("<div/>").appendTo(options.paginator).addClass('paginator').css({
-      position: 'absolute',
-      'z-index': 20000
-    })
+    this.paginators = $("<div/>").appendTo(options.paginator).addClass('paginator');
     for (i=0; i<this.count; i++) {
       page = $("<a/>").appendTo(this.paginators).addClass('page inact').attr('href','#');
 
@@ -221,19 +309,22 @@ wwSlideshow.prototype._createDots = function() {
 // =============================================================================
 
 var methods = {
-  init: function(options) { 
+  init: function(options) {
     var slideshow = new wwSlideshow(this, options);
     this.data("slideshow",slideshow);
     return this;
   },
   next: function() {
-    this.data("slideshow").next()
+    this.data("slideshow").next();
   },
-  prev: function() { 
-    this.data("slideshow").prev()
+  prev: function() {
+    this.data("slideshow").prev();
   },
-  show: function(index) { 
-    this.data("slideshow").show(index)
+  show: function(index) {
+    this.data("slideshow").show(index);
+  },
+  getIndex: function() {
+    return this.data("slideshow").getIndex();
   }
 };
 
@@ -245,6 +336,6 @@ $.fn.wwslideshow = function(method_options) {
   } else {
     $.error( 'Method ' +  method_options + ' does not exist on jQuery.tooltip' );
   }
-}
+};
 
 })(jQuery);
