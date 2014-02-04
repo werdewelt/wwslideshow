@@ -48,7 +48,8 @@ var wwSlideshow = function(selector, options) {
     easing: "swing",
     center: false,
     startdelay: 0,
-    text: false
+    text: false,
+    blockcontrols: true
   };
 
   if (typeof selector === "string") {
@@ -79,6 +80,7 @@ var wwSlideshow = function(selector, options) {
   this.selector = selector;
   this.paginators = null;
   this.timer = null;
+  this.is_sliding = false;
 
   // Prepare contents
   selector.css("position", "relative");
@@ -188,6 +190,7 @@ wwSlideshow.prototype.next = function() {
 wwSlideshow.prototype.show = function(index) {
   var self = this;
   var options = this.options;
+  if (this.is_sliding && options.blockcontrols) return;
   if (options.debug) console.log("show");
 
   if (index == this.active_index) return;
@@ -258,6 +261,7 @@ wwSlideshow.prototype._next = function() {
 wwSlideshow.prototype._beforeSlide = function(nextindex) {
   var self = this;
   var options = this.options;
+  this.is_sliding = true;
   if (options.debug) console.log("before")
 
   if (options.timer) {
@@ -273,6 +277,7 @@ wwSlideshow.prototype._beforeSlide = function(nextindex) {
 wwSlideshow.prototype._afterSlide = function(nextindex) {
   var self = this; 
   var options = this.options;
+  this.is_sliding = false;
   if (options.debug) console.log("after")
 
   if (options.autoplay) {
