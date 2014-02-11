@@ -151,7 +151,12 @@ var wwSlideshow = function(selector, options) {
   }
 
   // Activate current page
-  if (options.paginator) this.paginators.children().eq(this.active_index).removeClass("inact").addClass("act");
+  if (options.paginator) {
+    for (var index in this.paginators) {
+      var paginator = this.paginators[index];
+      paginator.children().eq(this.active_index).removeClass("inact").addClass("act");
+    }
+  }
 
 
   // Show first image
@@ -269,8 +274,11 @@ wwSlideshow.prototype._beforeSlide = function(nextindex) {
   }
 
   if (options.paginator) {
-    this.paginators.children().removeClass("act").addClass("inact");
-    this.paginators.children().eq(nextindex).removeClass("inact").addClass("act");
+    for (var index in this.paginators) {
+      var paginator = this.paginators[index];
+      paginator.children().removeClass("act").addClass("inact");
+      paginator.children().eq(nextindex).removeClass("inact").addClass("act");
+    }
   }
 };
 
@@ -292,19 +300,27 @@ wwSlideshow.prototype._createDots = function() {
   if (options.debug) console.log("createDots");
 
   if (options.paginator) {
-    this.paginators = $("<div/>").appendTo(options.paginator).addClass('paginator');
-    for (i=0; i<this.count; i++) {
-      page = $("<a/>").appendTo(this.paginators).addClass('page inact').attr('href','#');
 
-      if (options.nums) page.text(i+1);
+    this.paginators = [];
+    if (typeof options.paginator === "string") options.paginator = [options.paginator];
 
-      page.click( function() {
-        pageindex = $(this).index();
-        self.options.autoplay = false;
-        clearTimeout(self.timer);
-        self.show(pageindex);
-        return false;
-      });
+    for (var index in options.paginator) {
+      var target = options.paginator[index];
+      var paginator = $("<div/>").appendTo(target).addClass('paginator');
+      for (i=0; i<this.count; i++) {
+        page = $("<a/>").appendTo(paginator).addClass('page inact').attr('href','#');
+
+        if (options.nums) page.text(i+1);
+
+        page.click( function() {
+          pageindex = $(this).index();
+          self.options.autoplay = false;
+          clearTimeout(self.timer);
+          self.show(pageindex);
+          return false;
+        });
+      }
+      this.paginators.push(paginator);
     }
   }
 };
