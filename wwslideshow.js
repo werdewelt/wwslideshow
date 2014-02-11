@@ -81,6 +81,7 @@ var wwSlideshow = function(selector, options) {
   this.paginators = null;
   this.timer = null;
   this.is_sliding = false;
+  this.paginator_texts = false;
 
   // Prepare contents
   selector.css("position", "relative");
@@ -127,12 +128,30 @@ var wwSlideshow = function(selector, options) {
     });
   }
 
-  // Fit height option
+  // Center option
   if (options.center) {
     selector.children().each(function(){
       $(this).css("top", selector.height()/2-$(this).height()/2);
     });
   }
+
+  // Paginator Text
+  var textfound = false;
+  var texts = [];
+  selector.children().each(function (i, e) {
+    var elem = $(e);
+    var text = elem.attr("data-paginator-text");
+    if (text) {
+      texts.push(text);
+      textfound = true;
+    }
+    else {
+      texts.push("");
+    }
+  });
+  if (textfound) this.paginator_texts = texts;
+
+
 
   this.count = this.slides.length;
 
@@ -141,7 +160,7 @@ var wwSlideshow = function(selector, options) {
     });
   }
 
-  this._createDots();
+  this._createPaginator();
 
   // Find starting image
   if (options.random) {
@@ -294,10 +313,10 @@ wwSlideshow.prototype._afterSlide = function(nextindex) {
   }
 };
 
-wwSlideshow.prototype._createDots = function() {
+wwSlideshow.prototype._createPaginator = function() {
   var self = this;
   var options = this.options;
-  if (options.debug) console.log("createDots");
+  if (options.debug) console.log("createPaginator");
 
   if (options.paginator) {
 
@@ -311,6 +330,9 @@ wwSlideshow.prototype._createDots = function() {
         page = $("<a/>").appendTo(paginator).addClass('page inact').attr('href','#');
 
         if (options.nums) page.text(i+1);
+        else if (self.paginator_texts) {
+          $("<span/>").appendTo(page).addClass('paginator-text').text(self.paginator_texts[i]);
+        }
 
         page.click( function() {
           pageindex = $(this).index();
