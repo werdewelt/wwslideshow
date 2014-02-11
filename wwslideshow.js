@@ -248,48 +248,48 @@ wwSlideshow.prototype._transition = function(from_index, to_index, done) {
 
 };
 
-wwSlideshow.prototype._prev = function() { 
-  if (this.options.debug) console.log('_prev')
-  this.show((this.count + this.active_index - 1) % this.count)
+wwSlideshow.prototype._prev = function() {
+  if (this.options.debug) console.log('_prev');
+  this.show((this.count + this.active_index - 1) % this.count);
 };
 
 wwSlideshow.prototype._next = function() {
-  if (this.options.debug) console.log('_next')
-  this.show((this.active_index + 1) % this.count)
+  if (this.options.debug) console.log('_next');
+  this.show((this.active_index + 1) % this.count);
 };
 
 wwSlideshow.prototype._beforeSlide = function(nextindex) {
   var self = this;
   var options = this.options;
   this.is_sliding = true;
-  if (options.debug) console.log("before")
+  if (options.debug) console.log("before");
 
   if (options.timer) {
     clearTimeout(this.timer);
   }
 
   if (options.paginator) {
-    this.paginators.children().removeClass("act").addClass("inact")
+    this.paginators.children().removeClass("act").addClass("inact");
     this.paginators.children().eq(nextindex).removeClass("inact").addClass("act");
   }
-}
+};
 
 wwSlideshow.prototype._afterSlide = function(nextindex) {
-  var self = this; 
+  var self = this;
   var options = this.options;
   this.is_sliding = false;
-  if (options.debug) console.log("after")
+  if (options.debug) console.log("after");
 
   if (options.autoplay) {
     clearTimeout(this.timer);
-    this.timer = setTimeout(function(){self._next()}, options.delay);
+    this.timer = setTimeout(function(){self._next();}, options.delay);
   }
-}
+};
 
 wwSlideshow.prototype._createDots = function() {
   var self = this;
   var options = this.options;
-  if (options.debug) console.log("createDots")
+  if (options.debug) console.log("createDots");
 
   if (options.paginator) {
     this.paginators = $("<div/>").appendTo(options.paginator).addClass('paginator');
@@ -307,7 +307,7 @@ wwSlideshow.prototype._createDots = function() {
       });
     }
   }
-}
+};
 
 
 // jQuery plugin
