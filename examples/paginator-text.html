@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset='utf-8'>
+  <title>wwSlideshow Example</title>
+  <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+  <script type="text/javascript" src="../wwslideshow.js"></script>
+  <style>
+    .paginator {
+      height: 20px;
+    }
+    .paginator a {
+      display: inline-block;
+      width: auto;
+      height: 20px;
+      margin-left: 5px;
+      background-color: #333;
+      color: white;
+      padding: 0 5px;
+    }
+    .paginator a.act {
+     background-color: #777; 
+    }
+  </style>
+</head>
+<body>
+  <div id="slideshow">
+    <img src="img/img01.png" data-paginator-text="Lorem">
+    <img src="img/img02.png" data-paginator-text="ipsum">
+    <img src="img/img03.png" data-paginator-text="dolor">
+    <img src="img/img04.png" data-paginator-text="sit">
+    <img src="img/img05.png" data-paginator-text="amet">
+  </div>
+  <div id="paginator1"></div>
+  <br>
+  <div id="paginator2"></div>
+
+  <script type="text/javascript">
+    $("#slideshow").wwslideshow({paginator: ["#paginator1", "#paginator2"]})
+  </script>
+</body>
+</html>
