@@ -235,6 +235,22 @@ wwSlideshow.prototype.getIndex = function() {
   return this.active_index;
 };
 
+wwSlideshow.prototype.update = function() { 
+  var selector = this.selector;
+  selector.children().css('position', 'absolute');
+  var max_size=0;
+  var max_elem = selector.children().first();
+  selector.children().each(function (i, e) {
+    var elem = $(e);
+    var size = elem.height();
+    if ( size > max_size ) {
+      max_elem = elem;
+      max_size = size;
+    }
+  });
+  max_elem.css('position', 'relative');
+};
+
 
 // Private
 // =============================================================================
@@ -368,6 +384,9 @@ var methods = {
   },
   getIndex: function() {
     return this.data("slideshow").getIndex();
+  },
+  update: function() {
+    this.data("slideshow").update();
   }
 };
 
