@@ -173,7 +173,7 @@ var wwSlideshow = function(selector, options) {
   if (options.paginator) {
     for (var index in this.paginators) {
       var paginator = this.paginators[index];
-      paginator.children().eq(this.active_index).removeClass("inact").addClass("act");
+      $(paginator).children().eq(this.active_index).removeClass("inact").addClass("act");
     }
   }
 
@@ -311,8 +311,8 @@ wwSlideshow.prototype._beforeSlide = function(nextindex) {
   if (options.paginator) {
     for (var index in this.paginators) {
       var paginator = this.paginators[index];
-      paginator.children().removeClass("act").addClass("inact");
-      paginator.children().eq(nextindex).removeClass("inact").addClass("act");
+      $(paginator).children().removeClass("act").addClass("inact");
+      $(paginator).children().eq(nextindex).removeClass("inact").addClass("act");
     }
   }
 };
@@ -341,7 +341,7 @@ wwSlideshow.prototype._createPaginator = function() {
 
     for (var index in options.paginator) {
       var target = options.paginator[index];
-      var paginator = $("<div/>").appendTo(target).addClass('paginator');
+      var paginator = target;
       for (i=0; i<this.count; i++) {
         page = $("<a/>").appendTo(paginator).addClass('page inact').attr('href','#');
 
