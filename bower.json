@@ -4,7 +4,7 @@
   "version": "1.0.0",
   "homepage": "https://github.com/werdewelt/wwslideshow",
   "authors": [
-    "Jonas Schneider <schneider@werdewelt.info>"
+    "werdewelt GmbH <entwickler@werdewelt.info> (http://www.werdewelt.info)"
   ],
   "description": "Slideshow for text and/or images",
   "moduleType": [
