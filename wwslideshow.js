@@ -113,6 +113,9 @@ var wwSlideshow = function(selector, options) {
       bottom: 0
     });
   }
+  else {
+    this.slides = selector.children();
+  }
   selector.children().each(function(){
     if ($(this).data('wwslideshow-tallest') === 'true') {
       $(this).css({position: 'relative'});
@@ -230,7 +233,6 @@ wwSlideshow.prototype.show = function(index) {
     self.active_index = self.next_index;
     self._afterSlide();
   });
-  //this.slides.eq(this.active_index).animate({opacity: 0.0}, options.speed);
 };
 
 wwSlideshow.prototype.getIndex = function() {
