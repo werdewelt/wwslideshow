@@ -86,59 +86,11 @@ var wwSlideshow = function(selector, options) {
   this.paginator_texts = false;
 
   // Find tallest content
-  var max_size=0;
-  var max_elem = selector.children().first();
-  selector.children().each(function (i, e) {
-    var elem = $(e);
-    var size = elem.height();
-    if ( size > max_size ) {
-      max_elem = elem;
-      max_size = size;
-    }
-  });
-  max_elem.data('wwslideshow-tallest', 'true');
+  this._findTallest();
 
   // Prepare contents
-  selector.css("position", "relative");
-  if (options.realhide) selector.children().hide();
-  selector.children().css({
-    opacity: 0,
-    top: 0,
-    left: 0,
-    right: 0,
-    'z-index': 0
-  });
-  if (!options.text) {
-    this.slides = selector.children().css({
-      bottom: 0
-    });
-  }
-  else {
-    this.slides = selector.children();
-  }
-  selector.children().each(function(){
-    if ($(this).data('wwslideshow-tallest') === 'true') {
-      $(this).css({position: 'relative'});
-    }
-    else {
-      $(this).css({position: 'absolute'});
-    }
-  });
-
-  // Fit height option
-  if (options.fitheight) {
-    selector.children().css({
-      height: "inherit",
-      width: "auto"
-    });
-  }
-
-  // Center option
-  if (options.center) {
-    selector.children().each(function(){
-      $(this).css("top", selector.height()/2-$(this).height()/2);
-    });
-  }
+  selector.css('position', 'relative');
+  this._prepareContents();
 
   // Paginator Text
   var textfound = false;
@@ -239,9 +191,20 @@ wwSlideshow.prototype.getIndex = function() {
   return this.active_index;
 };
 
-wwSlideshow.prototype.update = function() { 
+wwSlideshow.prototype.update = function() {
+  this._resetContents();
+  this._findTallest();
+  this._prepareContents();
+  this.slides.eq(this.active_index).css({opacity: 1.0}).show();
+};
+
+
+// Private
+// =============================================================================
+
+wwSlideshow.prototype._findTallest = function() {
+  var self = this;
   var selector = this.selector;
-  selector.children().css('position', 'absolute');
   var max_size=0;
   var max_elem = selector.children().first();
   selector.children().each(function (i, e) {
@@ -252,13 +215,72 @@ wwSlideshow.prototype.update = function() {
       max_size = size;
     }
   });
-  max_elem.css('position', 'relative');
+  max_elem.data('wwslideshow-tallest', 'true');
 };
 
+wwSlideshow.prototype._prepareContents = function() {
+  var self = this;
+  var options = this.options;
+  var selector = this.selector;
 
-// Private
-// =============================================================================
+  if (options.realhide) selector.children().hide();
+  selector.children().css({
+    'opacity': 0,
+    'top': 0,
+    'left': 0,
+    'right': 0,
+    'z-index': 0
+  });
+  if (!options.text) {
+    self.slides = selector.children().css({
+      'bottom': 0
+    });
+  }
+  else {
+    self.slides = selector.children();
+  }
+  selector.children().each(function(){
+    if ($(this).data('wwslideshow-tallest') === 'true') {
+      $(this).css({position: 'relative'});
+    }
+    else {
+      $(this).css({position: 'absolute'});
+    }
+  });
 
+  // Fit height option
+  if (options.fitheight) {
+    selector.children().css({
+      'height': 'inherit',
+      'width': 'auto'
+    });
+  }
+
+  // Center option
+  if (options.center) {
+    selector.children().each(function(){
+      $(this).css('top', selector.height()/2-$(this).height()/2);
+    });
+  }
+};
+
+wwSlideshow.prototype._resetContents = function() {
+  var self = this;
+  var options = this.options;
+  var selector = this.selector;
+
+  selector.children().data('wwslideshow-tallest', '');
+  selector.children().css({
+    'opacity': '',
+    'top': '',
+    'bottom': '',
+    'left': '',
+    'right': '',
+    'z-index': '',
+    'width': '',
+    'height': ''
+  });
+};
 
 wwSlideshow.prototype._transition = function(from_index, to_index, done) {
   var self = this;
