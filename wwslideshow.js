@@ -136,7 +136,7 @@ var wwSlideshow = function(selector, options) {
 
 
   // Show first image
-  this.slides.eq(this.active_index).css({opacity: 1.0}).show();
+  this.slides.eq(this.active_index).css({'opacity': 1}).show();
 
   // Shedule next slide
   if (options.autoplay) this.timer = setTimeout(function(){self._next(); }, options.startdelay + options.delay + 1);
@@ -195,7 +195,10 @@ wwSlideshow.prototype.update = function() {
   this._resetContents();
   this._findTallest();
   this._prepareContents();
-  this.slides.eq(this.active_index).css({opacity: 1.0}).show();
+  this.slides.eq(this.active_index).css({
+    'opacity': 1,
+    'z-index': 1
+  }).show();
 };
 
 
@@ -294,17 +297,17 @@ wwSlideshow.prototype._transition = function(from_index, to_index, done) {
   if (options.fadeover) {
     from.css('z-index', 0);
     to.css('z-index', 1);
-    to.animate({'opacity': 1.0}, options.speed, options.easing, function(){
+    to.animate({'opacity': 1}, options.speed, options.easing, function(){
       from.css('opacity',0);
       jQuery.fx.interval = defaultInterval;
       done();
     });
   } else {
-    from.animate({opacity: 0}, options.speed, options.easing, function() {
+    from.animate({'opacity': 0}, options.speed, options.easing, function() {
       if (options.realhide) from.hide();
     });
     if (options.realhide) to.show();
-    to.animate({opacity: 1.0}, options.speed, options.easing, function(){
+    to.animate({'opacity': 1}, options.speed, options.easing, function(){
       from.css('z-index', 0);
       to.css('z-index', 1);
       jQuery.fx.interval = defaultInterval;
