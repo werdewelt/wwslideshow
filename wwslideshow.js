@@ -47,25 +47,25 @@ var wwSlideshow = function(selector, options) {
     fxinterval: 13,
     fitheight: false,
     realhide: false,
-    easing: "swing",
+    easing: 'swing',
     center: false,
     startdelay: 0,
     text: false,
     blockcontrols: true
   };
 
-  if (typeof selector === "string") {
+  if (typeof selector === 'string') {
     selector = $(selector);
   }
 
-  if (typeof options === "undefined") {
+  if (typeof options === 'undefined') {
     options = {};
   }
 
-  if (typeof options.autoplay !== "undefined" && !options.autoplay && typeof options.random == "undefined"){
+  if (typeof options.autoplay !== 'undefined' && !options.autoplay && typeof options.random == 'undefined'){
     options.random = false;
   }
-  if (typeof options.startindex !== "undefined"){
+  if (typeof options.startindex !== 'undefined'){
     options.random = false;
   }
 
@@ -97,13 +97,13 @@ var wwSlideshow = function(selector, options) {
   var texts = [];
   selector.children().each(function (i, e) {
     var elem = $(e);
-    var text = elem.attr("data-paginator-text");
+    var text = elem.attr('data-paginator-text');
     if (text) {
       texts.push(text);
       textfound = true;
     }
     else {
-      texts.push("");
+      texts.push('');
     }
   });
   if (textfound) this.paginator_texts = texts;
@@ -130,7 +130,7 @@ var wwSlideshow = function(selector, options) {
   if (options.paginator) {
     for (var index in this.paginators) {
       var paginator = this.paginators[index];
-      $(paginator).children().eq(this.active_index).removeClass("inact").addClass("act");
+      $(paginator).children().eq(this.active_index).removeClass('inact').addClass('act');
     }
   }
 
@@ -172,7 +172,7 @@ wwSlideshow.prototype.show = function(index) {
   var self = this;
   var options = this.options;
   if (this.is_sliding && options.blockcontrols) return;
-  if (options.debug) console.log("show");
+  if (options.debug) console.log('show');
 
   if (index == this.active_index) return;
 
@@ -292,9 +292,9 @@ wwSlideshow.prototype._transition = function(from_index, to_index, done) {
   
   jQuery.fx.interval = options.fxinterval;
   if (options.fadeover) {
-    from.css("z-index", 0);
-    to.css("z-index", 1);
-    to.animate({opacity: 1.0}, options.speed, options.easing, function(){
+    from.css('z-index', 0);
+    to.css('z-index', 1);
+    to.animate({'opacity': 1.0}, options.speed, options.easing, function(){
       from.css('opacity',0);
       jQuery.fx.interval = defaultInterval;
       done();
@@ -305,8 +305,8 @@ wwSlideshow.prototype._transition = function(from_index, to_index, done) {
     });
     if (options.realhide) to.show();
     to.animate({opacity: 1.0}, options.speed, options.easing, function(){
-      from.css("z-index", 0);
-      to.css("z-index", 1);
+      from.css('z-index', 0);
+      to.css('z-index', 1);
       jQuery.fx.interval = defaultInterval;
       done();
     });
@@ -328,7 +328,7 @@ wwSlideshow.prototype._beforeSlide = function(nextindex) {
   var self = this;
   var options = this.options;
   this.is_sliding = true;
-  if (options.debug) console.log("before");
+  if (options.debug) console.log('before');
 
   if (options.timer) {
     clearTimeout(this.timer);
@@ -337,8 +337,8 @@ wwSlideshow.prototype._beforeSlide = function(nextindex) {
   if (options.paginator) {
     for (var index in this.paginators) {
       var paginator = this.paginators[index];
-      $(paginator).children().removeClass("act").addClass("inact");
-      $(paginator).children().eq(nextindex).removeClass("inact").addClass("act");
+      $(paginator).children().removeClass('act').addClass('inact');
+      $(paginator).children().eq(nextindex).removeClass('inact').addClass('act');
     }
   }
 };
@@ -347,7 +347,7 @@ wwSlideshow.prototype._afterSlide = function(nextindex) {
   var self = this;
   var options = this.options;
   this.is_sliding = false;
-  if (options.debug) console.log("after");
+  if (options.debug) console.log('after');
 
   if (options.autoplay) {
     clearTimeout(this.timer);
@@ -358,22 +358,22 @@ wwSlideshow.prototype._afterSlide = function(nextindex) {
 wwSlideshow.prototype._createPaginator = function() {
   var self = this;
   var options = this.options;
-  if (options.debug) console.log("createPaginator");
+  if (options.debug) console.log('createPaginator');
 
   if (options.paginator) {
 
     this.paginators = [];
-    if (typeof options.paginator === "string") options.paginator = [options.paginator];
+    if (typeof options.paginator === 'string') options.paginator = [options.paginator];
 
     for (var index in options.paginator) {
       var target = options.paginator[index];
       var paginator = target;
       for (i=0; i<this.count; i++) {
-        page = $("<a/>").appendTo(paginator).addClass('page inact').attr('href','#');
+        page = $('<a/>').appendTo(paginator).addClass('page inact').attr('href','#');
 
         if (options.nums) page.text(i+1);
         else if (self.paginator_texts) {
-          $("<span/>").appendTo(page).addClass('paginator-text').text(self.paginator_texts[i]);
+          $('<span/>').appendTo(page).addClass('paginator-text').text(self.paginator_texts[i]);
         }
 
         page.click( function() {
@@ -396,23 +396,23 @@ wwSlideshow.prototype._createPaginator = function() {
 var methods = {
   init: function(options) {
     var slideshow = new wwSlideshow(this, options);
-    this.data("slideshow",slideshow);
+    this.data('slideshow',slideshow);
     return this;
   },
   next: function() {
-    this.data("slideshow").next();
+    this.data('slideshow').next();
   },
   prev: function() {
-    this.data("slideshow").prev();
+    this.data('slideshow').prev();
   },
   show: function(index) {
-    this.data("slideshow").show(index);
+    this.data('slideshow').show(index);
   },
   getIndex: function() {
-    return this.data("slideshow").getIndex();
+    return this.data('slideshow').getIndex();
   },
   update: function() {
-    this.data("slideshow").update();
+    this.data('slideshow').update();
   }
 };
 
