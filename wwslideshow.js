@@ -134,9 +134,11 @@ var wwSlideshow = function(selector, options) {
     }
   }
 
-
   // Show first image
-  this.slides.eq(this.active_index).css({'opacity': 1}).show();
+  this.slides.eq(this.active_index).css({
+    'opacity': 1,
+    'z-index': 1
+  }).show();
 
   // Shedule next slide
   if (options.autoplay) this.timer = setTimeout(function(){self._next(); }, options.startdelay + options.delay + 1);
