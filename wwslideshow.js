@@ -444,7 +444,7 @@ wwSlideshow.prototype._loadSlide = function(index, done) {
       });
     }
     if (imgElements) {
-      bgElements.each(function() {
+      imgElements.each(function() {
         var url = $(this).attr("data-ajax-src");
         $(this).attr("src", url);
       });
