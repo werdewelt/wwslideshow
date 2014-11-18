@@ -467,7 +467,6 @@ wwSlideshow.prototype._preloadImages = function(urls, done) {
     var url = urls[i];
     this._preloadImage(url, counterFunc);
   }
-};
 
 wwSlideshow.prototype._preloadImage = function(url, done) {
   var img = new Image();
@@ -486,6 +485,7 @@ wwSlideshow.prototype._createPaginator = function() {
 
     this.paginators = [];
     if (typeof options.paginator === 'string') options.paginator = [options.paginator];
+    if (options.paginator instanceof jQuery) options.paginator = [options.paginator];
     for (var index in options.paginator) {
       var target = options.paginator[index];
       var paginator = target;
