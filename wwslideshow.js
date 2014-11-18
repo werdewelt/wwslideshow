@@ -423,16 +423,16 @@ wwSlideshow.prototype._loadSlide = function(index, done) {
   candidates = candidates.add(slide.find("[data-ajax-background]"));
   candidates.each(function() {
     urls.push($(this).attr("data-ajax-background"));
-    bgElements = $(this);
   });
+  bgElements = candidates;
 
   candidates = $();
   candidates = candidates.add(slide.filter("[data-ajax-src]"));
   candidates = candidates.add(slide.find("[data-ajax-src]"));
   candidates.each(function() {
     urls.push($(this).attr("data-ajax-src"));
-    imgElements = $(this);
   });
+  imgElements = candidates;
 
   slide.data("ww-status", "loading");
   if (options.debug) console.log("Loading urls", urls);
@@ -486,7 +486,6 @@ wwSlideshow.prototype._createPaginator = function() {
 
     this.paginators = [];
     if (typeof options.paginator === 'string') options.paginator = [options.paginator];
-
     for (var index in options.paginator) {
       var target = options.paginator[index];
       var paginator = target;
