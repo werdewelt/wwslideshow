@@ -467,6 +467,7 @@ wwSlideshow.prototype._preloadImages = function(urls, done) {
     var url = urls[i];
     this._preloadImage(url, counterFunc);
   }
+};
 
 wwSlideshow.prototype._preloadImage = function(url, done) {
   var img = new Image();
