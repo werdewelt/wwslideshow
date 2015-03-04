@@ -398,6 +398,9 @@ wwSlideshow.prototype._afterSlide = function(nextindex) {
   if (options.ajax) {
     this._loadSlide(this._nextIndex());
   }
+  if (options.afterSlide) {
+    options.afterSlide(this.active_index);
+  }
 };
 
 wwSlideshow.prototype._loadSlide = function(index, done) {
