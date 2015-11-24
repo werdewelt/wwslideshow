@@ -39,6 +39,7 @@ var wwSlideshow = function(selector, options) {
     delay: 2000,      // delay between slides
     speed: 1000,      // transition speed
     paginator: null,  // selector
+    paginatorList: false,
     nums: false,
     debug: false,
     fadeover: false,
@@ -131,7 +132,9 @@ var wwSlideshow = function(selector, options) {
   if (options.paginator) {
     for (var index in this.paginators) {
       var paginator = this.paginators[index];
-      $(paginator).children().eq(this.active_index).removeClass('inact').addClass('act');
+      var $children = $(paginator).children();
+      var $current = options.paginatorList ? $children.eq(this.active_index).find('a') : $children.eq(this.active_index);
+      $current.removeClass('inactive').addClass('active');
     }
   }
 
@@ -372,8 +375,11 @@ wwSlideshow.prototype._beforeSlide = function(nextindex, done) {
   if (options.paginator) {
     for (var index in this.paginators) {
       var paginator = this.paginators[index];
-      $(paginator).children().removeClass('act').addClass('inact');
-      $(paginator).children().eq(nextindex).removeClass('inact').addClass('act');
+      var $children = $(paginator).children();
+      var $last = options.paginatorList ? $children.find('a') : $children;
+      var $next = options.paginatorList ? $children.eq(nextindex).find('a') : $children.eq(nextindex);
+      $last.removeClass('active').addClass('inactive');
+      $next.removeClass('inactive').addClass('active');
     }
   }
   if (options.ajax) {
@@ -494,7 +500,9 @@ wwSlideshow.prototype._createPaginator = function() {
       var target = options.paginator[index];
       var paginator = target;
       for (i=0; i<this.count; i++) {
-        page = $('<a/>').appendTo(paginator).addClass('page inact').attr('href','#');
+        var wrap = options.paginatorList ? $('<li/>').appendTo(paginator) : paginator;
+
+        page = $('<a/>').appendTo(wrap).addClass('page inactive').attr('href','#');
 
         if (options.nums) page.text(i+1);
         else if (self.paginator_texts) {
